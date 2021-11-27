@@ -1,0 +1,6 @@
+-IF:\TalTech\IAS1420\models
+-IF:\TalTech\IAS1420\models\m1_grt_rtw
+-I"E:\Program Files\MATLAB\R2020a\extern\include"
+-I"E:\Program Files\MATLAB\R2020a\simulink\include"
+-I"E:\Program Files\MATLAB\R2020a\rtw\c\src"
+-I"E:\Program Files\MATLAB\R2020a\rtw\c\src\ext_mode\common"
