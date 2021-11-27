@@ -2,7 +2,7 @@
 ## Makefile generated for Simulink model 'fan_controller'. 
 ## 
 ## Makefile     : fan_controller.mk
-## Generated on : Sat Nov 27 16:22:27 2021
+## Generated on : Sat Nov 27 19:59:57 2021
 ## MATLAB Coder version: 5.0 (R2020a)
 ## 
 ## Build Info:
@@ -196,7 +196,7 @@ DEFINES = $(DEFINES_BUILD_ARGS) $(DEFINES_CUSTOM) $(DEFINES_OPTS) $(DEFINES_STAN
 ## SOURCE FILES
 ###########################################################################
 
-SRCS = $(START_DIR)\fan_controller_ert_rtw\fan_controller.cpp
+SRCS = $(START_DIR)\fan_controller_ert_rtw\fan_controller.cpp $(START_DIR)\fan_controller_ert_rtw\fan_controller_data.cpp
 
 MAIN_SRC = $(START_DIR)\fan_controller_ert_rtw\ert_main.cpp
 
@@ -206,7 +206,7 @@ ALL_SRCS = $(SRCS) $(MAIN_SRC)
 ## OBJECTS
 ###########################################################################
 
-OBJS = fan_controller.obj
+OBJS = fan_controller.obj fan_controller_data.obj
 
 MAIN_OBJ = ert_main.obj
 
@@ -369,6 +369,10 @@ ert_main.obj : $(START_DIR)\fan_controller_ert_rtw\ert_main.cpp
 
 fan_controller.obj : $(START_DIR)\fan_controller_ert_rtw\fan_controller.cpp
 	$(CPP) $(CPPFLAGS) -Fo"$@" $(START_DIR)\fan_controller_ert_rtw\fan_controller.cpp
+
+
+fan_controller_data.obj : $(START_DIR)\fan_controller_ert_rtw\fan_controller_data.cpp
+	$(CPP) $(CPPFLAGS) -Fo"$@" $(START_DIR)\fan_controller_ert_rtw\fan_controller_data.cpp
 
 
 ###########################################################################

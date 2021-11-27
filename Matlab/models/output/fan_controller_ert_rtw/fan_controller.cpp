@@ -7,9 +7,9 @@
 //
 // Code generated for Simulink model 'fan_controller'.
 //
-// Model version                  : 1.3
+// Model version                  : 1.4
 // Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
-// C/C++ source code generated on : Sat Nov 27 16:21:56 2021
+// C/C++ source code generated on : Sat Nov 27 19:59:47 2021
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Custom Processor->Custom Processor
@@ -331,6 +331,7 @@ void fan_controllerModelClass::step()
   real_T rtb_Downsample_p;
   real_T rtb_Add1;
   real_T rtb_Diff_l;
+  real_T halfDeadBand;
   real_T rtb_TSamp;
   real_T rtb_Gain;
   real_T rtb_TSamp_g;
@@ -396,7 +397,7 @@ void fan_controllerModelClass::step()
   //  About '<S3>/TSamp':
   //   y = u * K where K = 1 / ( w * Ts )
 
-  rtb_TSamp = rtb_TSamp_g * 5.0;
+  rtb_TSamp = rtb_TSamp_g * fan_controller_P.TSamp_WtEt;
 
   // Sum: '<S3>/Diff' incorporates:
   //   UnitDelay: '<S3>/UD'
@@ -414,7 +415,8 @@ void fan_controllerModelClass::step()
     &fan_controller_DW.MovingAverage2);
 
   // Gain: '<Root>/Gain'
-  rtb_Gain = 16.0 * fan_controller_B.MovingAverage2.MovingAverage3;
+  rtb_Gain = fan_controller_P.Gain_Gain *
+    fan_controller_B.MovingAverage2.MovingAverage3;
 
   // MultiPortSwitch: '<S2>/Index Vector' incorporates:
   //   Inport: '<Root>/Temperature sensor value'
@@ -471,7 +473,7 @@ void fan_controllerModelClass::step()
   //  About '<S4>/TSamp':
   //   y = u * K where K = 1 / ( w * Ts )
 
-  rtb_TSamp_g *= 5.0;
+  rtb_TSamp_g *= fan_controller_P.TSamp_WtEt_l;
 
   // Sum: '<S4>/Diff' incorporates:
   //   UnitDelay: '<S4>/UD'
@@ -540,7 +542,7 @@ void fan_controllerModelClass::step()
   // Outport: '<Root>/Temperature change' incorporates:
   //   Gain: '<Root>/Gain1'
 
-  fan_controller_Y.Temperaturechange = 16.0 *
+  fan_controller_Y.Temperaturechange = fan_controller_P.Gain1_Gain *
     fan_controller_B.MovingAverage3.MovingAverage3;
 
   // Outport: '<Root>/Temperature baseline'
@@ -555,7 +557,7 @@ void fan_controllerModelClass::step()
   //   UnitDelay: '<Root>/Unit Delay'
 
   if (static_cast<int32_T>(fan_controller_DW.UnitDelay_DSTATE) == 0) {
-    rtb_Gain = 0.0;
+    rtb_Gain = fan_controller_P.Constant_Value;
   } else {
     rtb_Gain = rtb_Humidityerror;
   }
@@ -563,23 +565,24 @@ void fan_controllerModelClass::step()
   // End of MultiPortSwitch: '<S6>/Index Vector'
 
   // Saturate: '<S6>/Saturation'
-  if (rtb_Gain > 30.0) {
-    rtb_Gain = 30.0;
+  if (rtb_Gain > fan_controller_P.Saturation_UpperSat) {
+    rtb_Gain = fan_controller_P.Saturation_UpperSat;
   } else {
-    if (rtb_Gain < 0.0) {
-      rtb_Gain = 0.0;
+    if (rtb_Gain < fan_controller_P.Saturation_LowerSat) {
+      rtb_Gain = fan_controller_P.Saturation_LowerSat;
     }
   }
 
   // End of Saturate: '<S6>/Saturation'
 
   // Backlash: '<S6>/Backlash'
-  if (rtb_Gain < fan_controller_DW.PrevY - 1.0) {
-    fan_controller_B.Backlash = rtb_Gain + 1.0;
-  } else if (rtb_Gain <= fan_controller_DW.PrevY + 1.0) {
+  halfDeadBand = fan_controller_P.Backlash_BacklashWidth / 2.0;
+  if (rtb_Gain < fan_controller_DW.PrevY - halfDeadBand) {
+    fan_controller_B.Backlash = rtb_Gain + halfDeadBand;
+  } else if (rtb_Gain <= fan_controller_DW.PrevY + halfDeadBand) {
     fan_controller_B.Backlash = fan_controller_DW.PrevY;
   } else {
-    fan_controller_B.Backlash = rtb_Gain - 1.0;
+    fan_controller_B.Backlash = rtb_Gain - halfDeadBand;
   }
 
   // End of Backlash: '<S6>/Backlash'
@@ -588,7 +591,8 @@ void fan_controllerModelClass::step()
   //   Quantizer: '<S6>/Quantizer'
 
   fan_controller_Y.Requestedventpowerlevel = rt_roundd_snf
-    (fan_controller_B.Backlash / 7.5) * 7.5;
+    (fan_controller_B.Backlash / fan_controller_P.Quantizer_Interval) *
+    fan_controller_P.Quantizer_Interval;
 
   // Outport: '<Root>/Humidity baseline'
   fan_controller_Y.Humiditybaseline =
@@ -678,9 +682,20 @@ void fan_controllerModelClass::step()
 // Model initialize function
 void fan_controllerModelClass::initialize()
 {
+  // InitializeConditions for UnitDelay: '<Root>/Unit Delay'
+  fan_controller_DW.UnitDelay_DSTATE =
+    fan_controller_P.UnitDelay_InitialCondition;
+
+  // InitializeConditions for UnitDelay: '<S1>/Unit Delay'
+  fan_controller_DW.UnitDelay_DSTATE_e =
+    fan_controller_P.UnitDelay_InitialCondition_j;
+
+  // InitializeConditions for DownSample: '<S1>/Downsample'
+  fan_controller_DW.Downsample_Buffer = fan_controller_P.Downsample_ic;
+
   // InitializeConditions for DownSample: '<Root>/Downsample1'
   fan_controller_DW.Downsample1_Count = 1;
-  fan_controller_DW.Downsample1_Buffer = 50.0;
+  fan_controller_DW.Downsample1_Buffer = fan_controller_P.Downsample1_ic;
 
   // InitializeConditions for UnitDelay: '<S3>/UD'
   //
@@ -688,11 +703,18 @@ void fan_controllerModelClass::initialize()
   //
   //   Store in Global RAM
 
-  fan_controller_DW.UD_DSTATE = 50.0;
+  fan_controller_DW.UD_DSTATE = fan_controller_P.DiscreteDerivative_ICPrevScaled;
+
+  // InitializeConditions for UnitDelay: '<S2>/Unit Delay'
+  fan_controller_DW.UnitDelay_DSTATE_i =
+    fan_controller_P.UnitDelay_InitialCondition_i;
+
+  // InitializeConditions for DownSample: '<S2>/Downsample'
+  fan_controller_DW.Downsample_Buffer_l = fan_controller_P.Downsample_ic_e;
 
   // InitializeConditions for DownSample: '<Root>/Downsample'
   fan_controller_DW.Downsample_Count_g = 1;
-  fan_controller_DW.Downsample_Buffer_i = 25.0;
+  fan_controller_DW.Downsample_Buffer_i = fan_controller_P.Downsample_ic_j;
 
   // InitializeConditions for UnitDelay: '<S4>/UD'
   //
@@ -700,7 +722,11 @@ void fan_controllerModelClass::initialize()
   //
   //   Store in Global RAM
 
-  fan_controller_DW.UD_DSTATE_l = 25.0;
+  fan_controller_DW.UD_DSTATE_l =
+    fan_controller_P.DiscreteDerivative1_ICPrevScale;
+
+  // InitializeConditions for Backlash: '<S6>/Backlash'
+  fan_controller_DW.PrevY = fan_controller_P.Backlash_InitialOutput;
 
   // SystemInitialize for Outport: '<Root>/State ID' incorporates:
   //   Chart: '<Root>/States'
@@ -739,10 +765,10 @@ void fan_controllerModelClass::terminate()
 
 // Constructor
 fan_controllerModelClass::fan_controllerModelClass():
-  fan_controller_B()
-  ,fan_controller_DW()
-  ,fan_controller_U()
+  fan_controller_U()
   ,fan_controller_Y()
+  ,fan_controller_B()
+  ,fan_controller_DW()
   ,fan_controller_M()
 {
   // Currently there is no constructor body generated.
@@ -752,6 +778,20 @@ fan_controllerModelClass::fan_controllerModelClass():
 fan_controllerModelClass::~fan_controllerModelClass()
 {
   // Currently there is no destructor body generated.
+}
+
+// Block parameters get method
+const fan_controllerModelClass::P_fan_controller_T & fan_controllerModelClass::
+  getBlockParameters() const
+{
+  return fan_controller_P;
+}
+
+// Block parameters set method
+void fan_controllerModelClass::setBlockParameters(const P_fan_controller_T
+  *pfan_controller_P)
+{
+  fan_controller_P = *pfan_controller_P;
 }
 
 // Real-Time Model get method

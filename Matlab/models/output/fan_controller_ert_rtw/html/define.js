@@ -18,9 +18,12 @@ this.def["fan_controller_MovingAverage3_p"] = {file: "fan_controller_cpp.html",l
 this.def["fan_contr_MovingAverage3_a_Term"] = {file: "fan_controller_cpp.html",line:299,type:"fcn"};
 this.def["rt_roundd_snf"] = {file: "fan_controller_cpp.html",line:306,type:"fcn"};
 this.def["step"] = {file: "fan_controller_cpp.html",line:325,type:"fcn"};
-this.def["initialize"] = {file: "fan_controller_cpp.html",line:679,type:"fcn"};
-this.def["terminate"] = {file: "fan_controller_cpp.html",line:724,type:"fcn"};
-this.def["getRTM"] = {file: "fan_controller_cpp.html",line:759,type:"fcn"};
+this.def["initialize"] = {file: "fan_controller_cpp.html",line:683,type:"fcn"};
+this.def["terminate"] = {file: "fan_controller_cpp.html",line:750,type:"fcn"};
+this.def["getBlockParameters"] = {file: "fan_controller_cpp.html",line:785,type:"fcn"};
+this.def["fan_controller_P"] = {file: "fan_controller_cpp.html",line:787,type:"var"};
+this.def["setBlockParameters"] = {file: "fan_controller_cpp.html",line:791,type:"fcn"};
+this.def["getRTM"] = {file: "fan_controller_cpp.html",line:799,type:"fcn"};
 this.def["B_MovingAverage3_fan_controll_T"] = {file: "fan_controller_h.html",line:42,type:"type"};
 this.def["DW_MovingAverage3_fan_control_T"] = {file: "fan_controller_h.html",line:50,type:"type"};
 this.def["B_MovingAverage3_fan_contro_c_T"] = {file: "fan_controller_h.html",line:55,type:"type"};
@@ -29,13 +32,14 @@ this.def["B_fan_controller_T"] = {file: "fan_controller_h.html",line:82,type:"ty
 this.def["DW_fan_controller_T"] = {file: "fan_controller_h.html",line:113,type:"type"};
 this.def["ExtU_fan_controller_T"] = {file: "fan_controller_h.html",line:119,type:"type"};
 this.def["ExtY_fan_controller_T"] = {file: "fan_controller_h.html",line:130,type:"type"};
-this.def["errorStatus"] = {file: "fan_controller_h.html",line:134,type:"var"};
+this.def["DiscreteDerivative_ICPrevScaled"] = {file: "fan_controller_h.html",line:134,type:"var"};
 this.def["StatesModeType"] = {file: "fan_controller_types_h.html",line:33,type:"type"};
 this.def["g_dsp_private_SlidingWindowAv_T"] = {file: "fan_controller_types_h.html",line:54,type:"type"};
 this.def["cell_wrap_fan_controller_T"] = {file: "fan_controller_types_h.html",line:71,type:"type"};
 this.def["dsp_simulink_MovingAverage_fa_T"] = {file: "fan_controller_types_h.html",line:94,type:"type"};
 this.def["g_dsp_private_SlidingWindow_h_T"] = {file: "fan_controller_types_h.html",line:115,type:"type"};
 this.def["dsp_simulink_MovingAverage_e_T"] = {file: "fan_controller_types_h.html",line:138,type:"type"};
+this.def["fan_controller_P"] = {file: "fan_controller_data_cpp.html",line:24,type:"var"};
 this.def["int8_T"] = {file: "rtwtypes_h.html",line:51,type:"type"};
 this.def["uint8_T"] = {file: "rtwtypes_h.html",line:52,type:"type"};
 this.def["int16_T"] = {file: "rtwtypes_h.html",line:53,type:"type"};
@@ -82,6 +86,8 @@ function Html2SrcLink() {
 	this.html2Root["fan_controller_private_h.html"] = "fan_controller_private_h.html";
 	this.html2SrcPath["fan_controller_types_h.html"] = "../fan_controller_types.h";
 	this.html2Root["fan_controller_types_h.html"] = "fan_controller_types_h.html";
+	this.html2SrcPath["fan_controller_data_cpp.html"] = "../fan_controller_data.cpp";
+	this.html2Root["fan_controller_data_cpp.html"] = "fan_controller_data_cpp.html";
 	this.html2SrcPath["rtwtypes_h.html"] = "../rtwtypes.h";
 	this.html2Root["rtwtypes_h.html"] = "rtwtypes_h.html";
 	this.getLink2Src = function (htmlFileName) {
@@ -99,4 +105,4 @@ function Html2SrcLink() {
 }
 Html2SrcLink.instance = new Html2SrcLink();
 var fileList = [
-"ert_main_cpp.html","fan_controller_cpp.html","fan_controller_h.html","fan_controller_private_h.html","fan_controller_types_h.html","rtwtypes_h.html"];
+"ert_main_cpp.html","fan_controller_cpp.html","fan_controller_h.html","fan_controller_private_h.html","fan_controller_types_h.html","fan_controller_data_cpp.html","rtwtypes_h.html"];

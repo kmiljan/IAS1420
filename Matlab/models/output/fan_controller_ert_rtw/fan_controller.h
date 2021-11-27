@@ -7,9 +7,9 @@
 //
 // Code generated for Simulink model 'fan_controller'.
 //
-// Model version                  : 1.3
+// Model version                  : 1.4
 // Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
-// C/C++ source code generated on : Sat Nov 27 16:21:56 2021
+// C/C++ source code generated on : Sat Nov 27 19:59:47 2021
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Custom Processor->Custom Processor
@@ -129,10 +129,82 @@ class fan_controllerModelClass {
     real_T Requestedventpowerlevel;    // '<Root>/Requested vent power level'
   } ExtY_fan_controller_T;
 
+  // Parameters (default storage)
+  struct P_fan_controller_T {
+    real_T DiscreteDerivative_ICPrevScaled;
+                              // Mask Parameter: DiscreteDerivative_ICPrevScaled
+                                 //  Referenced by: '<S3>/UD'
+
+    real_T DiscreteDerivative1_ICPrevScale;
+                              // Mask Parameter: DiscreteDerivative1_ICPrevScale
+                                 //  Referenced by: '<S4>/UD'
+
+    real_T Constant_Value;             // Expression: 0
+                                          //  Referenced by: '<S6>/Constant'
+
+    real_T UnitDelay_InitialCondition; // Expression: 0
+                                          //  Referenced by: '<Root>/Unit Delay'
+
+    real_T UnitDelay_InitialCondition_j;// Expression: 0
+                                           //  Referenced by: '<S1>/Unit Delay'
+
+    real_T Downsample_ic;              // Expression: initial_h
+                                          //  Referenced by: '<S1>/Downsample'
+
+    real_T Downsample1_ic;             // Expression: initial_h
+                                          //  Referenced by: '<Root>/Downsample1'
+
+    real_T TSamp_WtEt;                 // Computed Parameter: TSamp_WtEt
+                                          //  Referenced by: '<S3>/TSamp'
+
+    real_T Gain_Gain;                  // Expression: 16
+                                          //  Referenced by: '<Root>/Gain'
+
+    real_T UnitDelay_InitialCondition_i;// Expression: 0
+                                           //  Referenced by: '<S2>/Unit Delay'
+
+    real_T Downsample_ic_e;            // Expression: initial_t
+                                          //  Referenced by: '<S2>/Downsample'
+
+    real_T Downsample_ic_j;            // Expression: initial_t
+                                          //  Referenced by: '<Root>/Downsample'
+
+    real_T TSamp_WtEt_l;               // Computed Parameter: TSamp_WtEt_l
+                                          //  Referenced by: '<S4>/TSamp'
+
+    real_T Gain1_Gain;                 // Expression: 16
+                                          //  Referenced by: '<Root>/Gain1'
+
+    real_T Saturation_UpperSat;        // Expression: 30
+                                          //  Referenced by: '<S6>/Saturation'
+
+    real_T Saturation_LowerSat;        // Expression: 0
+                                          //  Referenced by: '<S6>/Saturation'
+
+    real_T Backlash_BacklashWidth;     // Expression: 2
+                                          //  Referenced by: '<S6>/Backlash'
+
+    real_T Backlash_InitialOutput;     // Expression: 0
+                                          //  Referenced by: '<S6>/Backlash'
+
+    real_T Quantizer_Interval;         // Expression: 30/4
+                                          //  Referenced by: '<S6>/Quantizer'
+
+  };
+
   // Real-time Model Data Structure
   struct RT_MODEL_fan_controller_T {
     const char_T * volatile errorStatus;
   };
+
+  // Tunable parameters
+  static P_fan_controller_T fan_controller_P;
+
+  // External inputs
+  ExtU_fan_controller_T fan_controller_U;
+
+  // External outputs
+  ExtY_fan_controller_T fan_controller_Y;
 
   // model initialize function
   void initialize();
@@ -148,6 +220,13 @@ class fan_controllerModelClass {
 
   // Destructor
   ~fan_controllerModelClass();
+
+  // Block parameters get method
+  const fan_controllerModelClass::P_fan_controller_T & getBlockParameters()
+    const;
+
+  // Block parameters set method
+  void setBlockParameters(const P_fan_controller_T *pfan_controller_P);
 
   // Root-level structure-based inputs set method
 
@@ -176,12 +255,6 @@ class fan_controllerModelClass {
 
   // Block states
   DW_fan_controller_T fan_controller_DW;
-
-  // External inputs
-  ExtU_fan_controller_T fan_controller_U;
-
-  // External outputs
-  ExtY_fan_controller_T fan_controller_Y;
 
   // Real-Time Model
   RT_MODEL_fan_controller_T fan_controller_M;
