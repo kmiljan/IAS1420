@@ -5,7 +5,8 @@
 %%
 %load file to string variable
 
-fileName = 'F:\TalTech\IAS1420\andmed\Andmed2.json';
+% Do cd path_to_repo\Matlab in the command window to set correct working directory
+fileName = '../Data/Andmed2.json';
 stringData = fileread(fileName);
 
 %%
