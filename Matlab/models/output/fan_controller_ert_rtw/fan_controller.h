@@ -7,9 +7,9 @@
 //
 // Code generated for Simulink model 'fan_controller'.
 //
-// Model version                  : 1.4
+// Model version                  : 1.7
 // Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
-// C/C++ source code generated on : Sat Nov 27 19:59:47 2021
+// C/C++ source code generated on : Sun Nov 28 11:11:36 2021
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Custom Processor->Custom Processor
@@ -18,10 +18,12 @@
 //
 #ifndef RTW_HEADER_fan_controller_h_
 #define RTW_HEADER_fan_controller_h_
-#include <cmath>
 #include <cstring>
 #include "rtwtypes.h"
 #include "fan_controller_types.h"
+
+// Child system includes
+#include "baseline_predictor.h"
 
 // Macros for accessing real-time model data structure
 #ifndef rtmGetErrorStatus
@@ -30,6 +32,10 @@
 
 #ifndef rtmSetErrorStatus
 # define rtmSetErrorStatus(rtm, val)   ((rtm)->errorStatus = (val))
+#endif
+
+#ifndef rtmGetErrorStatusPointer
+# define rtmGetErrorStatusPointer(rtm) ((const char_T **)(&((rtm)->errorStatus)))
 #endif
 
 // Class declaration for model fan_controller
@@ -49,32 +55,9 @@ class fan_controllerModelClass {
     boolean_T objisempty;              // '<Root>/Moving Average3'
   } DW_MovingAverage3_fan_control_T;
 
-  // Block signals for system '<S1>/Moving Average3'
-  typedef struct {
-    real_T MovingAverage3;             // '<S1>/Moving Average3'
-  } B_MovingAverage3_fan_contro_c_T;
-
-  // Block states (default storage) for system '<S1>/Moving Average3'
-  typedef struct {
-    g_dsp_private_SlidingWindow_h_T gobj_1;// '<S1>/Moving Average3'
-    g_dsp_private_SlidingWindow_h_T gobj_2;// '<S1>/Moving Average3'
-    dsp_simulink_MovingAverage_e_T obj;// '<S1>/Moving Average3'
-    boolean_T objisempty;              // '<S1>/Moving Average3'
-  } DW_MovingAverage3_fan_contr_f_T;
-
   // Block signals (default storage)
   typedef struct {
-    real_T IndexVector;                // '<S1>/Index Vector'
-    real_T IndexVector_n;              // '<S2>/Index Vector'
-    real_T Backlash;                   // '<S6>/Backlash'
-    B_MovingAverage3_fan_contro_c_T MovingAverage_pn;// '<S1>/Moving Average3'
-    B_MovingAverage3_fan_contro_c_T MovingAverage1_pn;// '<S1>/Moving Average3'
-    B_MovingAverage3_fan_contro_c_T MovingAverage2_pn;// '<S1>/Moving Average3'
-    B_MovingAverage3_fan_contro_c_T MovingAverage3_pn;// '<S1>/Moving Average3'
-    B_MovingAverage3_fan_contro_c_T MovingAverage_p;// '<S1>/Moving Average3'
-    B_MovingAverage3_fan_contro_c_T MovingAverage1_p;// '<S1>/Moving Average3'
-    B_MovingAverage3_fan_contro_c_T MovingAverage2_p;// '<S1>/Moving Average3'
-    B_MovingAverage3_fan_contro_c_T MovingAverage3_p;// '<S1>/Moving Average3'
+    real_T Backlash;                   // '<S4>/Backlash'
     B_MovingAverage3_fan_controll_T MovingAverage;// '<Root>/Moving Average3'
     B_MovingAverage3_fan_controll_T MovingAverage2;// '<Root>/Moving Average3'
     B_MovingAverage3_fan_controll_T MovingAverage1;// '<Root>/Moving Average3'
@@ -84,28 +67,14 @@ class fan_controllerModelClass {
   // Block states (default storage) for system '<Root>'
   typedef struct {
     real_T UnitDelay_DSTATE;           // '<Root>/Unit Delay'
-    real_T UnitDelay_DSTATE_e;         // '<S1>/Unit Delay'
-    real_T UD_DSTATE;                  // '<S3>/UD'
-    real_T UnitDelay_DSTATE_i;         // '<S2>/Unit Delay'
-    real_T UD_DSTATE_l;                // '<S4>/UD'
-    real_T Downsample_Buffer;          // '<S1>/Downsample'
+    real_T UD_DSTATE;                  // '<S1>/UD'
+    real_T UD_DSTATE_l;                // '<S2>/UD'
     real_T Downsample1_Buffer;         // '<Root>/Downsample1'
-    real_T Downsample_Buffer_l;        // '<S2>/Downsample'
-    real_T Downsample_Buffer_i;        // '<Root>/Downsample'
-    real_T PrevY;                      // '<S6>/Backlash'
-    int32_T Downsample_Count;          // '<S1>/Downsample'
+    real_T Downsample_Buffer;          // '<Root>/Downsample'
+    real_T PrevY;                      // '<S4>/Backlash'
     int32_T Downsample1_Count;         // '<Root>/Downsample1'
-    int32_T Downsample_Count_a;        // '<S2>/Downsample'
-    int32_T Downsample_Count_g;        // '<Root>/Downsample'
+    int32_T Downsample_Count;          // '<Root>/Downsample'
     uint8_T is_active_c3_fan_controller;// '<Root>/States'
-    DW_MovingAverage3_fan_contr_f_T MovingAverage_pn;// '<S1>/Moving Average3'
-    DW_MovingAverage3_fan_contr_f_T MovingAverage1_pn;// '<S1>/Moving Average3'
-    DW_MovingAverage3_fan_contr_f_T MovingAverage2_pn;// '<S1>/Moving Average3'
-    DW_MovingAverage3_fan_contr_f_T MovingAverage3_pn;// '<S1>/Moving Average3'
-    DW_MovingAverage3_fan_contr_f_T MovingAverage_p;// '<S1>/Moving Average3'
-    DW_MovingAverage3_fan_contr_f_T MovingAverage1_p;// '<S1>/Moving Average3'
-    DW_MovingAverage3_fan_contr_f_T MovingAverage2_p;// '<S1>/Moving Average3'
-    DW_MovingAverage3_fan_contr_f_T MovingAverage3_p;// '<S1>/Moving Average3'
     DW_MovingAverage3_fan_control_T MovingAverage;// '<Root>/Moving Average3'
     DW_MovingAverage3_fan_control_T MovingAverage2;// '<Root>/Moving Average3'
     DW_MovingAverage3_fan_control_T MovingAverage1;// '<Root>/Moving Average3'
@@ -133,68 +102,56 @@ class fan_controllerModelClass {
   struct P_fan_controller_T {
     real_T DiscreteDerivative_ICPrevScaled;
                               // Mask Parameter: DiscreteDerivative_ICPrevScaled
-                                 //  Referenced by: '<S3>/UD'
+                                 //  Referenced by: '<S1>/UD'
 
     real_T DiscreteDerivative1_ICPrevScale;
                               // Mask Parameter: DiscreteDerivative1_ICPrevScale
-                                 //  Referenced by: '<S4>/UD'
+                                 //  Referenced by: '<S2>/UD'
 
     real_T Constant_Value;             // Expression: 0
-                                          //  Referenced by: '<S6>/Constant'
+                                          //  Referenced by: '<S4>/Constant'
 
     real_T UnitDelay_InitialCondition; // Expression: 0
                                           //  Referenced by: '<Root>/Unit Delay'
 
-    real_T UnitDelay_InitialCondition_j;// Expression: 0
-                                           //  Referenced by: '<S1>/Unit Delay'
-
-    real_T Downsample_ic;              // Expression: initial_h
-                                          //  Referenced by: '<S1>/Downsample'
+    real_T Constant_Value_f;           // Expression: initial_h
+                                          //  Referenced by: '<Root>/Constant'
 
     real_T Downsample1_ic;             // Expression: initial_h
                                           //  Referenced by: '<Root>/Downsample1'
 
-    real_T TSamp_WtEt;                 // Computed Parameter: TSamp_WtEt
-                                          //  Referenced by: '<S3>/TSamp'
-
     real_T Gain_Gain;                  // Expression: 16
                                           //  Referenced by: '<Root>/Gain'
 
-    real_T UnitDelay_InitialCondition_i;// Expression: 0
-                                           //  Referenced by: '<S2>/Unit Delay'
+    real_T Constant1_Value;            // Expression: initial_t
+                                          //  Referenced by: '<Root>/Constant1'
 
-    real_T Downsample_ic_e;            // Expression: initial_t
-                                          //  Referenced by: '<S2>/Downsample'
-
-    real_T Downsample_ic_j;            // Expression: initial_t
+    real_T Downsample_ic;              // Expression: initial_t
                                           //  Referenced by: '<Root>/Downsample'
-
-    real_T TSamp_WtEt_l;               // Computed Parameter: TSamp_WtEt_l
-                                          //  Referenced by: '<S4>/TSamp'
 
     real_T Gain1_Gain;                 // Expression: 16
                                           //  Referenced by: '<Root>/Gain1'
 
     real_T Saturation_UpperSat;        // Expression: 30
-                                          //  Referenced by: '<S6>/Saturation'
+                                          //  Referenced by: '<S4>/Saturation'
 
     real_T Saturation_LowerSat;        // Expression: 0
-                                          //  Referenced by: '<S6>/Saturation'
+                                          //  Referenced by: '<S4>/Saturation'
 
     real_T Backlash_BacklashWidth;     // Expression: 2
-                                          //  Referenced by: '<S6>/Backlash'
+                                          //  Referenced by: '<S4>/Backlash'
 
     real_T Backlash_InitialOutput;     // Expression: 0
-                                          //  Referenced by: '<S6>/Backlash'
+                                          //  Referenced by: '<S4>/Backlash'
 
     real_T Quantizer_Interval;         // Expression: 30/4
-                                          //  Referenced by: '<S6>/Quantizer'
+                                          //  Referenced by: '<S4>/Quantizer'
 
   };
 
   // Real-time Model Data Structure
   struct RT_MODEL_fan_controller_T {
-    const char_T * volatile errorStatus;
+    const char_T *errorStatus;
   };
 
   // Tunable parameters
@@ -269,24 +226,18 @@ class fan_controllerModelClass {
   void fan_controlle_SystemCore_delete(dsp_simulink_MovingAverage_fa_T *obj);
   void matlabCodegenHandle_matlabCodeg(dsp_simulink_MovingAverage_fa_T *obj);
 
-  // private member function(s) for subsystem '<S1>/Moving Average3'
-  void fan_contr_MovingAverage3_c_Init(DW_MovingAverage3_fan_contr_f_T *localDW);
-  void fan_controller_MovingAverage3_p(real_T rtu_0,
-    B_MovingAverage3_fan_contro_c_T *localB, DW_MovingAverage3_fan_contr_f_T
-    *localDW);
-  void fan_contr_MovingAverage3_a_Term(DW_MovingAverage3_fan_contr_f_T *localDW);
-  real_T SlidingWindowAverageCG_stepImpl(g_dsp_private_SlidingWindow_h_T *obj,
-    real_T u);
-  void fan_contro_SystemCore_release_m(dsp_simulink_MovingAverage_e_T *obj);
-  void fan_control_SystemCore_delete_a(dsp_simulink_MovingAverage_e_T *obj);
-  void matlabCodegenHandle_matlabCod_g(dsp_simulink_MovingAverage_e_T *obj);
+  // model instance variable for '<Root>/Humidity baseline predictor'
+  baseline_predictorModelClass Humidity_baseline_prMDLOBJ1;
+
+  // model instance variable for '<Root>/Humidity baseline predictor1'
+  baseline_predictorModelClass Humidity_baseline_prMDLOBJ2;
 };
 
 //-
 //  These blocks were eliminated from the model due to optimizations:
 //
-//  Block '<S3>/Data Type Duplicate' : Unused code path elimination
-//  Block '<S4>/Data Type Duplicate' : Unused code path elimination
+//  Block '<S1>/Data Type Duplicate' : Unused code path elimination
+//  Block '<S2>/Data Type Duplicate' : Unused code path elimination
 
 
 //-
@@ -304,12 +255,10 @@ class fan_controllerModelClass {
 //  Here is the system hierarchy for this model
 //
 //  '<Root>' : 'fan_controller'
-//  '<S1>'   : 'fan_controller/Baseline predictor filter'
-//  '<S2>'   : 'fan_controller/Baseline predictor filter1'
-//  '<S3>'   : 'fan_controller/Discrete Derivative'
-//  '<S4>'   : 'fan_controller/Discrete Derivative1'
-//  '<S5>'   : 'fan_controller/States'
-//  '<S6>'   : 'fan_controller/Vent power control'
+//  '<S1>'   : 'fan_controller/Discrete Derivative'
+//  '<S2>'   : 'fan_controller/Discrete Derivative1'
+//  '<S3>'   : 'fan_controller/States'
+//  '<S4>'   : 'fan_controller/Vent power control'
 
 #endif                                 // RTW_HEADER_fan_controller_h_
 

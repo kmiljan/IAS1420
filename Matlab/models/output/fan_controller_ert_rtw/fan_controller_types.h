@@ -7,9 +7,9 @@
 //
 // Code generated for Simulink model 'fan_controller'.
 //
-// Model version                  : 1.4
+// Model version                  : 1.7
 // Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
-// C/C++ source code generated on : Sat Nov 27 19:59:47 2021
+// C/C++ source code generated on : Sun Nov 28 11:11:36 2021
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Custom Processor->Custom Processor
@@ -94,50 +94,6 @@ struct tag_AxbnolBzt5DX5uskBOpryG
 typedef struct tag_AxbnolBzt5DX5uskBOpryG dsp_simulink_MovingAverage_fa_T;
 
 #endif                                 //typedef_dsp_simulink_MovingAverage_fa_T
-
-#ifndef struct_tag_s79JTaJHzrtgmwQAFOfFmF
-#define struct_tag_s79JTaJHzrtgmwQAFOfFmF
-
-struct tag_s79JTaJHzrtgmwQAFOfFmF
-{
-  int32_T isInitialized;
-  boolean_T isSetupComplete;
-  real_T pCumSum;
-  real_T pCumSumRev[511];
-  real_T pCumRevIndex;
-};
-
-#endif                                 //struct_tag_s79JTaJHzrtgmwQAFOfFmF
-
-#ifndef typedef_g_dsp_private_SlidingWindow_h_T
-#define typedef_g_dsp_private_SlidingWindow_h_T
-
-typedef struct tag_s79JTaJHzrtgmwQAFOfFmF g_dsp_private_SlidingWindow_h_T;
-
-#endif                                 //typedef_g_dsp_private_SlidingWindow_h_T
-
-#ifndef struct_tag_wDEYHy0oo1UK5Yb5CXFYKG
-#define struct_tag_wDEYHy0oo1UK5Yb5CXFYKG
-
-struct tag_wDEYHy0oo1UK5Yb5CXFYKG
-{
-  boolean_T matlabCodegenIsDeleted;
-  int32_T isInitialized;
-  boolean_T isSetupComplete;
-  boolean_T TunablePropsChanged;
-  cell_wrap_fan_controller_T inputVarSize;
-  g_dsp_private_SlidingWindow_h_T *pStatistic;
-  int32_T NumChannels;
-};
-
-#endif                                 //struct_tag_wDEYHy0oo1UK5Yb5CXFYKG
-
-#ifndef typedef_dsp_simulink_MovingAverage_e_T
-#define typedef_dsp_simulink_MovingAverage_e_T
-
-typedef struct tag_wDEYHy0oo1UK5Yb5CXFYKG dsp_simulink_MovingAverage_e_T;
-
-#endif                                 //typedef_dsp_simulink_MovingAverage_e_T
 #endif                                 // RTW_HEADER_fan_controller_types_h_
 
 //

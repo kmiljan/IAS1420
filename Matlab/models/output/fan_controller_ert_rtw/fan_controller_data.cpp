@@ -7,9 +7,9 @@
 //
 // Code generated for Simulink model 'fan_controller'.
 //
-// Model version                  : 1.4
+// Model version                  : 1.7
 // Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
-// C/C++ source code generated on : Sat Nov 27 19:59:47 2021
+// C/C++ source code generated on : Sun Nov 28 11:11:36 2021
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Custom Processor->Custom Processor
@@ -23,17 +23,17 @@
 fan_controllerModelClass::P_fan_controller_T fan_controllerModelClass::
   fan_controller_P = {
   // Mask Parameter: DiscreteDerivative_ICPrevScaled
-  //  Referenced by: '<S3>/UD'
+  //  Referenced by: '<S1>/UD'
 
   50.0,
 
   // Mask Parameter: DiscreteDerivative1_ICPrevScale
-  //  Referenced by: '<S4>/UD'
+  //  Referenced by: '<S2>/UD'
 
   25.0,
 
   // Expression: 0
-  //  Referenced by: '<S6>/Constant'
+  //  Referenced by: '<S4>/Constant'
 
   0.0,
 
@@ -42,13 +42,8 @@ fan_controllerModelClass::P_fan_controller_T fan_controllerModelClass::
 
   0.0,
 
-  // Expression: 0
-  //  Referenced by: '<S1>/Unit Delay'
-
-  0.0,
-
   // Expression: initial_h
-  //  Referenced by: '<S1>/Downsample'
+  //  Referenced by: '<Root>/Constant'
 
   50.0,
 
@@ -57,23 +52,13 @@ fan_controllerModelClass::P_fan_controller_T fan_controllerModelClass::
 
   50.0,
 
-  // Computed Parameter: TSamp_WtEt
-  //  Referenced by: '<S3>/TSamp'
-
-  5.0,
-
   // Expression: 16
   //  Referenced by: '<Root>/Gain'
 
   16.0,
 
-  // Expression: 0
-  //  Referenced by: '<S2>/Unit Delay'
-
-  0.0,
-
   // Expression: initial_t
-  //  Referenced by: '<S2>/Downsample'
+  //  Referenced by: '<Root>/Constant1'
 
   25.0,
 
@@ -82,38 +67,33 @@ fan_controllerModelClass::P_fan_controller_T fan_controllerModelClass::
 
   25.0,
 
-  // Computed Parameter: TSamp_WtEt_l
-  //  Referenced by: '<S4>/TSamp'
-
-  5.0,
-
   // Expression: 16
   //  Referenced by: '<Root>/Gain1'
 
   16.0,
 
   // Expression: 30
-  //  Referenced by: '<S6>/Saturation'
+  //  Referenced by: '<S4>/Saturation'
 
   30.0,
 
   // Expression: 0
-  //  Referenced by: '<S6>/Saturation'
+  //  Referenced by: '<S4>/Saturation'
 
   0.0,
 
   // Expression: 2
-  //  Referenced by: '<S6>/Backlash'
+  //  Referenced by: '<S4>/Backlash'
 
   2.0,
 
   // Expression: 0
-  //  Referenced by: '<S6>/Backlash'
+  //  Referenced by: '<S4>/Backlash'
 
   0.0,
 
   // Expression: 30/4
-  //  Referenced by: '<S6>/Quantizer'
+  //  Referenced by: '<S4>/Quantizer'
 
   7.5
 };

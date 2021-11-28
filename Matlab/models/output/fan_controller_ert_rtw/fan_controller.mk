@@ -2,7 +2,7 @@
 ## Makefile generated for Simulink model 'fan_controller'. 
 ## 
 ## Makefile     : fan_controller.mk
-## Generated on : Sat Nov 27 19:59:57 2021
+## Generated on : Sun Nov 28 11:12:27 2021
 ## MATLAB Coder version: 5.0 (R2020a)
 ## 
 ## Build Info:
@@ -20,6 +20,7 @@
 # Macro Descriptions:
 # PRODUCT_NAME            Name of the system to build
 # MAKEFILE                Name of this makefile
+# MODELREF_LINK_RSPFILE   Linker command listing model reference link objects
 # COMPILER_COMMAND_FILE   Compiler command listing model reference header paths
 # CMD_FILE                Command file
 
@@ -29,13 +30,14 @@ MATLAB_ROOT               = E:\Program Files\MATLAB\R2020a
 MATLAB_BIN                = E:\Program Files\MATLAB\R2020a\bin
 MATLAB_ARCH_BIN           = $(MATLAB_BIN)\win64
 MASTER_ANCHOR_DIR         = 
-START_DIR                 = F:\TalTech\IAS1420\repos\IAS1420\Matlab\models\output
+START_DIR                 = F:\TalTech\IAS1420\repos\IAS1420\Matlab
 SOLVER                    = 
 SOLVER_OBJ                = 
 CLASSIC_INTERFACE         = 0
 TGT_FCN_LIB               = ISO_C++
 MODEL_HAS_DYNAMICALLY_LOADED_SFCNS = 0
 RELATIVE_PATH_TO_ANCHOR   = ..
+MODELREF_LINK_RSPFILE     = fan_controller_ref.rsp
 COMPILER_COMMAND_FILE     = fan_controller_comp.rsp
 CMD_FILE                  = fan_controller.rsp
 C_STANDARD_OPTS           = 
@@ -222,7 +224,9 @@ PREBUILT_OBJS =
 ## LIBRARIES
 ###########################################################################
 
-LIBS = 
+MODELREF_LIBS = F:\TalTech\IAS1420\repos\IAS1420\Matlab\slprj\ert\baseline_predictor\baseline_predictor_rtwlib.lib
+
+LIBS = $(START_DIR)\slprj\ert\_sharedutils\rtwshared.lib
 
 ###########################################################################
 ## SYSTEM LIBRARIES
@@ -272,7 +276,7 @@ all : build
 build : set_environment_variables prebuild $(PRODUCT)
 
 
-buildobj : set_environment_variables prebuild $(OBJS) $(PREBUILT_OBJS)
+buildobj : set_environment_variables prebuild $(OBJS) $(PREBUILT_OBJS) $(LIBS)
 	@cmd /C "@echo ### Successfully generated all binary outputs."
 
 
@@ -301,9 +305,9 @@ set_environment_variables :
 # Create a standalone executable            
 #-------------------------------------------
 
-$(PRODUCT) : $(OBJS) $(PREBUILT_OBJS) $(MAIN_OBJ)
+$(PRODUCT) : $(OBJS) $(PREBUILT_OBJS) $(MODELREF_LIBS) $(LIBS) $(MAIN_OBJ)
 	@cmd /C "@echo ### Creating standalone executable "$(PRODUCT)" ..."
-	$(CPP_LD) $(CPP_LDFLAGS) -out:$(PRODUCT) @$(CMD_FILE) $(SYSTEM_LIBS) $(TOOLCHAIN_LIBS)
+	$(CPP_LD) $(CPP_LDFLAGS) -out:$(PRODUCT) @$(CMD_FILE) @$(MODELREF_LINK_RSPFILE) $(LIBS) $(SYSTEM_LIBS) $(TOOLCHAIN_LIBS)
 	@cmd /C "@echo ### Created: $(PRODUCT)"
 
 
