@@ -16,7 +16,7 @@
 
 #include "Arduino.h"
 
-#define RHT_READ_INTERVAL_MS 2000
+#define RHT_READ_INTERVAL_MS 250
 
 #ifndef RHT03_h
 #define RHT03_h
