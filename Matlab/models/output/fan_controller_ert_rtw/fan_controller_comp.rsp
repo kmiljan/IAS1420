@@ -1,9 +1,9 @@
--IF:\TalTech\IAS1420\repos\IAS1420\Matlab\slprj\ert\baseline_predictor
--IF:\TalTech\IAS1420\repos\IAS1420\Matlab
--IF:\TalTech\IAS1420\repos\IAS1420\Matlab\fan_controller_ert_rtw
+-IF:\TalTech\IAS1420\repos\IAS1420\Matlab\models\output\slprj\ert\baseline_predictor
+-IF:\TalTech\IAS1420\repos\IAS1420\Matlab\models\output
+-IF:\TalTech\IAS1420\repos\IAS1420\Matlab\models\output\fan_controller_ert_rtw
 -I"E:\Program Files\MATLAB\R2020a\extern\include"
 -I"E:\Program Files\MATLAB\R2020a\simulink\include"
 -I"E:\Program Files\MATLAB\R2020a\rtw\c\src"
 -I"E:\Program Files\MATLAB\R2020a\rtw\c\src\ext_mode\common"
 -I"E:\Program Files\MATLAB\R2020a\rtw\c\ert"
--IF:\TalTech\IAS1420\repos\IAS1420\Matlab\slprj\ert\_sharedutils
+-IF:\TalTech\IAS1420\repos\IAS1420\Matlab\models\output\slprj\ert\_sharedutils

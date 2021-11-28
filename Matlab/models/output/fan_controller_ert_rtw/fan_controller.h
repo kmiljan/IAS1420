@@ -9,7 +9,7 @@
 //
 // Model version                  : 1.7
 // Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
-// C/C++ source code generated on : Sun Nov 28 11:11:36 2021
+// C/C++ source code generated on : Sun Nov 28 12:41:49 2021
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Custom Processor->Custom Processor
@@ -229,8 +229,8 @@ class fan_controllerModelClass {
   // model instance variable for '<Root>/Humidity baseline predictor'
   baseline_predictorModelClass Humidity_baseline_prMDLOBJ1;
 
-  // model instance variable for '<Root>/Humidity baseline predictor1'
-  baseline_predictorModelClass Humidity_baseline_prMDLOBJ2;
+  // model instance variable for '<Root>/Temperature baseline predictor'
+  baseline_predictorModelClass Temperature_baselineMDLOBJ2;
 };
 
 //-

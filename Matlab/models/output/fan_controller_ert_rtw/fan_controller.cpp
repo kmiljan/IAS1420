@@ -9,7 +9,7 @@
 //
 // Model version                  : 1.7
 // Simulink Coder version         : 9.3 (R2020a) 18-Nov-2019
-// C/C++ source code generated on : Sun Nov 28 11:11:36 2021
+// C/C++ source code generated on : Sun Nov 28 12:41:49 2021
 //
 // Target selection: ert.tlc
 // Embedded hardware selection: Custom Processor->Custom Processor
@@ -245,13 +245,13 @@ void fan_controllerModelClass::step()
   // Outport: '<Root>/Humidity change'
   fan_controller_Y.Humiditychange = rtb_Gain;
 
-  // ModelReference: '<Root>/Humidity baseline predictor1' incorporates:
+  // ModelReference: '<Root>/Temperature baseline predictor' incorporates:
   //   Constant: '<Root>/Constant1'
   //   Inport: '<Root>/Temperature sensor value'
   //   Outport: '<Root>/Temperature baseline'
   //   UnitDelay: '<Root>/Unit Delay'
 
-  Humidity_baseline_prMDLOBJ2.step(&fan_controller_U.Temperaturesensorvalue,
+  Temperature_baselineMDLOBJ2.step(&fan_controller_U.Temperaturesensorvalue,
     &fan_controller_DW.UnitDelay_DSTATE, &fan_controller_P.Constant1_Value,
     &fan_controller_Y.Temperaturebaseline);
 
@@ -464,10 +464,10 @@ void fan_controllerModelClass::initialize()
   Humidity_baseline_prMDLOBJ1.setErrorStatusPointer(rtmGetErrorStatusPointer
     ((&fan_controller_M)));
 
-  // Model Initialize function for ModelReference Block: '<Root>/Humidity baseline predictor1' 
+  // Model Initialize function for ModelReference Block: '<Root>/Temperature baseline predictor' 
 
-  // Set error status pointer for ModelReference Block: '<Root>/Humidity baseline predictor1' 
-  Humidity_baseline_prMDLOBJ2.setErrorStatusPointer(rtmGetErrorStatusPointer
+  // Set error status pointer for ModelReference Block: '<Root>/Temperature baseline predictor' 
+  Temperature_baselineMDLOBJ2.setErrorStatusPointer(rtmGetErrorStatusPointer
     ((&fan_controller_M)));
 
   // InitializeConditions for UnitDelay: '<Root>/Unit Delay'
@@ -510,13 +510,13 @@ void fan_controllerModelClass::initialize()
 
   Humidity_baseline_prMDLOBJ1.init();
 
-  // SystemInitialize for ModelReference: '<Root>/Humidity baseline predictor1' incorporates:
+  // SystemInitialize for ModelReference: '<Root>/Temperature baseline predictor' incorporates:
   //   Constant: '<Root>/Constant1'
   //   Inport: '<Root>/Temperature sensor value'
   //   Outport: '<Root>/Temperature baseline'
   //   UnitDelay: '<Root>/Unit Delay'
 
-  Humidity_baseline_prMDLOBJ2.init();
+  Temperature_baselineMDLOBJ2.init();
 
   // SystemInitialize for Outport: '<Root>/State ID' incorporates:
   //   Chart: '<Root>/States'

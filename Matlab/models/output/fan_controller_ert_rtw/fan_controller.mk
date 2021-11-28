@@ -2,7 +2,7 @@
 ## Makefile generated for Simulink model 'fan_controller'. 
 ## 
 ## Makefile     : fan_controller.mk
-## Generated on : Sun Nov 28 11:12:27 2021
+## Generated on : Sun Nov 28 12:11:10 2021
 ## MATLAB Coder version: 5.0 (R2020a)
 ## 
 ## Build Info:
@@ -30,7 +30,7 @@ MATLAB_ROOT               = E:\Program Files\MATLAB\R2020a
 MATLAB_BIN                = E:\Program Files\MATLAB\R2020a\bin
 MATLAB_ARCH_BIN           = $(MATLAB_BIN)\win64
 MASTER_ANCHOR_DIR         = 
-START_DIR                 = F:\TalTech\IAS1420\repos\IAS1420\Matlab
+START_DIR                 = F:\TalTech\IAS1420\repos\IAS1420\Matlab\models\output
 SOLVER                    = 
 SOLVER_OBJ                = 
 CLASSIC_INTERFACE         = 0
@@ -224,7 +224,7 @@ PREBUILT_OBJS =
 ## LIBRARIES
 ###########################################################################
 
-MODELREF_LIBS = F:\TalTech\IAS1420\repos\IAS1420\Matlab\slprj\ert\baseline_predictor\baseline_predictor_rtwlib.lib
+MODELREF_LIBS = F:\TalTech\IAS1420\repos\IAS1420\Matlab\models\output\slprj\ert\baseline_predictor\baseline_predictor_rtwlib.lib
 
 LIBS = $(START_DIR)\slprj\ert\_sharedutils\rtwshared.lib
 

@@ -2,7 +2,7 @@
 ## Makefile generated for Simulink model 'baseline_predictor'. 
 ## 
 ## Makefile     : baseline_predictor.mk
-## Generated on : Sun Nov 28 11:11:05 2021
+## Generated on : Sun Nov 28 12:40:08 2021
 ## MATLAB Coder version: 5.0 (R2020a)
 ## 
 ## Build Info:
@@ -30,7 +30,7 @@ MATLAB_ROOT               = E:\Program Files\MATLAB\R2020a
 MATLAB_BIN                = E:\Program Files\MATLAB\R2020a\bin
 MATLAB_ARCH_BIN           = $(MATLAB_BIN)\win64
 MASTER_ANCHOR_DIR         = 
-START_DIR                 = F:\TalTech\IAS1420\repos\IAS1420\Matlab
+START_DIR                 = F:\TalTech\IAS1420\repos\IAS1420\Matlab\models\output
 SOLVER                    = 
 SOLVER_OBJ                = 
 CLASSIC_INTERFACE         = 0
@@ -213,7 +213,7 @@ PREBUILT_OBJS =
 ## LIBRARIES
 ###########################################################################
 
-LIBS = 
+LIBS = $(START_DIR)\slprj\ert\_sharedutils\rtwshared.lib
 
 ###########################################################################
 ## SYSTEM LIBRARIES
