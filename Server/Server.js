@@ -33,7 +33,7 @@ var server = http.createServer ( function(request,response){
                 let jsonObject = JSON.parse(body);
                 //console.log(jsonObject);
 
-                var sql = "INSERT INTO esp32data5 (id, humidity, temperature, Requestedventpowerlevel, Humiditychange, Humiditybaseline, Temperaturechange, Temperaturebaseline, Outputenabled, StateID ) VALUES (" +
+                var sql = "INSERT INTO esp32data6 (id, humidity, temperature, Requestedventpowerlevel, Humiditychange, Humiditybaseline, Temperaturechange, Temperaturebaseline, Outputenabled, StateID ) VALUES (" +
                 0 +","+
                 jsonObject.humidity +","+
                 jsonObject.temperature +","+
