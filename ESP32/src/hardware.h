@@ -1,3 +1,4 @@
+//hardware.h file for definition of ports connected to ESP32
 //Sensor data line. With 1k pull-up to 3.3V on breadboard.
 #define HW_SENSOR_DATA1 2
 #define HW_SENSOR_DATA2 0
