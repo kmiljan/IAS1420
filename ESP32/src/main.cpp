@@ -369,8 +369,9 @@ void sendData()
       http.begin(client, "http://iotplotter.com/api/v2/feed/252680283241329865");
 
       // Clear and add values to the json structure which will be sent to iotplotter.
-      jsonDoc = "";
-
+      jsonDoc.clear();
+      httpRequestData = "";
+      
       jsonDoc["data"]["humidity"][0]["value"]=currentHumidity;
       jsonDoc["data"]["temperature"][0]["value"] = currentTemperature;
       jsonDoc["data"]["Requestedventpowerlevel"][0]["value"] = controllerOutput.Requestedventpowerlevel;
@@ -381,7 +382,6 @@ void sendData()
       jsonDoc["data"]["Outputenabled"][0]["value"] = controllerOutput.Outputenabled;
       
       // Convert json structure to string, and serialize it to the httpRequestData.
-      httpRequestData = "";
       serializeJson(jsonDoc, httpRequestData);
       Serial.print("httpRequestData: ");
       Serial.println(httpRequestData);
