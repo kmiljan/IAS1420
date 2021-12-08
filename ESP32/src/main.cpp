@@ -1,49 +1,60 @@
-// Common librays 
+// main.cpp file for the entry point of the controller, and managing it's behaviour.
+
+// Common librays.
 #include <Arduino.h>
 #include <Wire.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
-// FreeRTOS headers
+// FreeRTOS headers.
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-// Custom headers
+// Custom headers.
 #include "RHT03.h"
 #include "hardware.h"
 #include "fan_controller.h"
 #include "fan_controller_private.h"
 
 
-// Global variables definition
+// Global variables definition.
+
+//Classes for controller and sensor.
 RHT03 RHT;
 fan_controllerModelClass controller;
 fan_controllerModelClass::ExtU_fan_controller_T sensorInput;
 fan_controllerModelClass::ExtY_fan_controller_T controllerOutput;
 fan_controllerModelClass::P_fan_controller_T parameters;
+ 
 
+// Controller power variable.
 bool power = true;
-float baselineHumidity = 0;
+
+
+// Main behaviour variables.
 int extractorState = 0;
 float currentHumidity = 0;
 float currentTemperature = 0;
-float relativeHumidity = 0;
 
 
-// Variables for WiFi connection.(Replace with your network credentials)
+// Variables for WiFi connection.(Replace with your network credentials).
 const char *ssid = "***";
 const char *password = "***";
 
 
+//Development server and iotPlotter variables.(Replace with your values)
+const char *serverName = "http://192.168.1.102:8080/upload";
+const char *iotAPIKey = "086d903f4e9b8a8053c3ec2ac60c8b5c3c2fbd0653";
+const char *iotPlotterFeed = "http://iotplotter.com/api/v2/feed/252680283241329865";
+
+
 // Function prototypes
 void sendData();
+void readSensorLoop(void *pvParameters);
+void controllerLoop(void *pvParameters);
 
-
-//Development server variables
-const char *serverName = "http://192.168.1.102:8080/upload";
-String apiKeyValue = "tPmAT5Ab3j7F9";
-
+// Functions 
 
 /**
  * Set up pinmodes, parameters, begin logging data from the RHT and conncect to WiFi.
@@ -71,18 +82,18 @@ void setup()
   Serial.begin(115200);
 
   // Begin logging data from the RHT.
-  RHT.begin(HW_SENSOR_DATA1);
+  RHT.begin(HW_SENSOR_DATA);
 
-  // Set controller parameters
+  // Set controller parameters.
   parameters.DiscreteDerivative_ICPrevScaled = 50;
   parameters.DiscreteDerivative1_ICPrevScale = 25;
   parameters.Constant_Value = 0;
   parameters.UnitDelay_InitialCondition = 0;
-  parameters.Constant_Value_f = 35; // Expression: initial humidity (set this to expected value)
-  parameters.Downsample1_ic = 35;   // Expression: initial humidity (set this to expected value)
+  parameters.Constant_Value_f = 35; // Expression: initial humidity (set this to expected value).
+  parameters.Downsample1_ic = 35;   // Expression: initial humidity (set this to expected value).
   parameters.Gain_Gain = 16;
-  parameters.Constant1_Value = 22; // Expression: initial temperature (set this to expected value)
-  parameters.Downsample_ic = 22;   // Expression: initial temperature (set this to expected value)
+  parameters.Constant1_Value = 22; // Expression: initial temperature (set this to expected value).
+  parameters.Downsample_ic = 22;   // Expression: initial temperature (set this to expected value).
   parameters.Gain1_Gain = 16;
   parameters.Saturation_UpperSat = 30;
   parameters.Saturation_LowerSat = 0;
@@ -93,7 +104,7 @@ void setup()
   controller.setBlockParameters(&parameters);
   controller.initialize();
 
-  // Connect to WiFi
+  // Connect to WiFi.
   WiFi.begin(ssid, password);
   Serial.println("Connecting");
   while (WiFi.status() != WL_CONNECTED)
@@ -106,163 +117,6 @@ void setup()
   Serial.println(WiFi.localIP());
 }
 
-/**
- * Read the sensor and button input as fast as possible
- */
-void readSensorLoop(void *pvParameters)
-{
-  while (1)
-  {
-    // Read button input.
-    int buttonState = digitalRead(HW_BUTTON);
-
-    // If pressed recheck for 30 presses to toggle power of device.
-    if(buttonState == LOW)
-    {
-      int i = 30;
-      while(i != 0)
-      {
-        // Read button input.
-        int buttonState = digitalRead(HW_BUTTON);
-
-        // Toggle device power and flash LEDs to indicate.
-        if(i == 1)
-        {
-          if(power == false)
-          {
-            for(i = 3; i != 0; i--)
-            {
-              digitalWrite(HW_LED_R,HIGH);
-              digitalWrite(HW_LED_Y,HIGH);
-              digitalWrite(HW_LED_G,HIGH);
-              delay(500);
-              digitalWrite(HW_LED_R,LOW);
-              digitalWrite(HW_LED_Y,LOW);
-              digitalWrite(HW_LED_G,LOW);
-              delay(500);
-            }
-            Serial.println("Powering ON!");
-            power = true;
-          }
-          else
-          {
-            power = false;
-            for(i = 3; i != 0; i--)
-            {
-              digitalWrite(HW_LED_R,HIGH);
-              digitalWrite(HW_LED_Y,HIGH);
-              digitalWrite(HW_LED_G,HIGH);
-              delay(500);
-              digitalWrite(HW_LED_R,LOW);
-              digitalWrite(HW_LED_Y,LOW);
-              digitalWrite(HW_LED_G,LOW);
-              delay(500);
-            }
-            // Turn off LEDs.
-            digitalWrite(HW_LED_R,HIGH);
-            digitalWrite(HW_LED_Y,HIGH);
-            digitalWrite(HW_LED_G,HIGH);
-            Serial.println("Powering OFF!");
-          }
-          break;
-        }
-        else if(buttonState == LOW)
-        {
-          i--;
-        }
-        delay(100);
-      }
-    }
-
-    // If device power is enabled read sensor data.
-    if (power)
-    {
-      // Run update of sensor data
-      Serial.println("Updating from RHT sensor");
-      int updateReturn1 = RHT.update();
-
-      // On successful update 
-      if (updateReturn1 == 1)
-      { 
-        // Read current humidity and temperature
-        currentHumidity = RHT.humidity();
-        currentTemperature = RHT.tempC();
-      }
-      else
-      { 
-        // If failed to read sensor data.
-        delay(RHT_READ_INTERVAL_MS);
-      }
-    }
-    else
-    {
-      delay(100);
-    }
-  }
-}
-
-
-/**
- * Run the controller loop once per second
- */
-void controllerLoop(void *pvParameters)
-{
-  TickType_t xLastWakeTime;
-  const TickType_t xPeriod = 1000 / portTICK_PERIOD_MS;
-
-  while (1)
-  {
-    // Initialise the xLastWakeTime variable with the current time.
-    xLastWakeTime = xTaskGetTickCount();
-
-    // If automatic mode is enabled run the controller.
-    if (power) 
-    {
-      Serial.println("Running controller");
-      sensorInput.Humiditysensorvalue = currentHumidity;
-      sensorInput.Temperaturesensorvalue = currentTemperature;
-
-      controller.setExternalInputs(&sensorInput);
-
-      controller.step();
-
-      //Get the controller outputs and calculate wanted extractor state.
-      controllerOutput = controller.getExternalOutputs();
-      extractorState = controllerOutput.Requestedventpowerlevel / 10;
-
-      //Set LEDs based on wanted extractor state.
-      if (extractorState >= 2.25)
-      {
-        digitalWrite(HW_LED_G, LOW);
-        digitalWrite(HW_LED_R, HIGH);
-        digitalWrite(HW_LED_Y, HIGH);
-      }
-      else if (extractorState >= 1.5)
-      {
-        digitalWrite(HW_LED_Y, LOW);
-        digitalWrite(HW_LED_R, HIGH);
-        digitalWrite(HW_LED_G, HIGH);
-      }
-      else if (extractorState >= 0.75)
-      {
-        digitalWrite(HW_LED_R, LOW);
-        digitalWrite(HW_LED_Y, HIGH);
-        digitalWrite(HW_LED_G, HIGH);
-      }
-      else
-      {
-        digitalWrite(HW_LED_R, HIGH);
-        digitalWrite(HW_LED_Y, HIGH);
-        digitalWrite(HW_LED_G, HIGH);
-      }
-    }
-    else{
-      delay(100);
-    }
-
-    vTaskDelayUntil(&xLastWakeTime, xPeriod);
-  }
-}
 
 /**
  * Main loop to intialize the readSensorLoop,controllerLoop, and handle the sendData function.
@@ -270,6 +124,7 @@ void controllerLoop(void *pvParameters)
 void loop()
 {
 
+  // Create RTOS tasks to run readSensorLoop() and controllerLoop() functions.
   xTaskCreate(readSensorLoop, "readSensorLoop", 4096, NULL, 1, NULL);
   xTaskCreate(controllerLoop, "controllerLoop", 4096, NULL, 1, NULL);
 
@@ -282,6 +137,7 @@ void loop()
     vTaskDelay(10000 / portTICK_PERIOD_MS);
   }
 }
+
 
 /**
  * Function to send data the database server and to iotplotter.
@@ -366,7 +222,7 @@ void sendData()
 
       // Send data to iotplotter.
       // Start new HTTP channel.
-      http.begin(client, "http://iotplotter.com/api/v2/feed/252680283241329865");
+      http.begin(client, iotPlotterFeed);
 
       // Clear and add values to the json structure which will be sent to iotplotter.
       jsonDoc.clear();
@@ -388,7 +244,7 @@ void sendData()
 
       // Specify content-type and api-key headers.
       http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-      http.addHeader("api-key", "086d903f4e9b8a8053c3ec2ac60c8b5c3c2fbd0653");
+      http.addHeader("api-key", iotAPIKey);
 
       // Send HTTP POST request.
       httpResponseCode = http.POST(httpRequestData);
@@ -405,7 +261,7 @@ void sendData()
         Serial.println(httpResponseCode);
       }
 
-      // Free resources
+      // Free resources after sending.
       http.end();
     }
     else
@@ -429,5 +285,164 @@ void sendData()
   else
   {
     delay(100);
+  }
+}
+
+
+/**
+ * Read the sensor and button input as fast as possible.
+ */
+void readSensorLoop(void *pvParameters)
+{
+  while (1)
+  {
+    // Read button input.
+    int buttonState = digitalRead(HW_BUTTON);
+
+    // If pressed recheck for 30 presses to toggle power of device.
+    if(buttonState == LOW)
+    {
+      int i = 30;
+      while(i != 0)
+      {
+        // Read button input.
+        int buttonState = digitalRead(HW_BUTTON);
+
+        // Toggle device power and flash LEDs to indicate.
+        if(i == 1)
+        {
+          if(power == false)
+          {
+            for(i = 3; i != 0; i--)
+            {
+              digitalWrite(HW_LED_R,HIGH);
+              digitalWrite(HW_LED_Y,HIGH);
+              digitalWrite(HW_LED_G,HIGH);
+              delay(500);
+              digitalWrite(HW_LED_R,LOW);
+              digitalWrite(HW_LED_Y,LOW);
+              digitalWrite(HW_LED_G,LOW);
+              delay(500);
+            }
+            Serial.println("Powering ON!");
+            power = true;
+          }
+          else
+          {
+            power = false;
+            for(i = 3; i != 0; i--)
+            {
+              digitalWrite(HW_LED_R,HIGH);
+              digitalWrite(HW_LED_Y,HIGH);
+              digitalWrite(HW_LED_G,HIGH);
+              delay(500);
+              digitalWrite(HW_LED_R,LOW);
+              digitalWrite(HW_LED_Y,LOW);
+              digitalWrite(HW_LED_G,LOW);
+              delay(500);
+            }
+            // Turn off LEDs.
+            digitalWrite(HW_LED_R,HIGH);
+            digitalWrite(HW_LED_Y,HIGH);
+            digitalWrite(HW_LED_G,HIGH);
+            Serial.println("Powering OFF!");
+          }
+          break;
+        }
+        else if(buttonState == LOW)
+        {
+          i--;
+        }
+        delay(100);
+      }
+    }
+
+    // If device power is enabled read sensor data.
+    if (power)
+    {
+      // Run update of sensor data.
+      Serial.println("Updating from RHT sensor");
+      int updateReturn1 = RHT.update();
+
+      // On successful update.
+      if (updateReturn1 == 1)
+      { 
+        // Read current humidity and temperature.
+        currentHumidity = RHT.humidity();
+        currentTemperature = RHT.tempC();
+      }
+      else
+      { 
+        // If failed to read sensor data.
+        delay(RHT_READ_INTERVAL_MS);
+      }
+    }
+    else
+    {
+      delay(100);
+    }
+  }
+}
+
+
+/**
+ * Run the controller loop once per second, and set LEDs based on output.
+ */
+void controllerLoop(void *pvParameters)
+{
+  TickType_t xLastWakeTime;
+  const TickType_t xPeriod = 1000 / portTICK_PERIOD_MS;
+
+  while (1)
+  {
+    // Initialise the xLastWakeTime variable with the current time.
+    xLastWakeTime = xTaskGetTickCount();
+
+    // If automatic mode is enabled run the controller.
+    if (power) 
+    {
+      Serial.println("Running controller");
+      sensorInput.Humiditysensorvalue = currentHumidity;
+      sensorInput.Temperaturesensorvalue = currentTemperature;
+
+      controller.setExternalInputs(&sensorInput);
+
+      controller.step();
+
+      //Get the controller outputs and calculate wanted extractor state.
+      controllerOutput = controller.getExternalOutputs();
+      extractorState = controllerOutput.Requestedventpowerlevel / 10;
+
+      //Set LEDs based on wanted extractor state.
+      if (extractorState >= 2.25)
+      {
+        digitalWrite(HW_LED_G, LOW);
+        digitalWrite(HW_LED_R, HIGH);
+        digitalWrite(HW_LED_Y, HIGH);
+      }
+      else if (extractorState >= 1.5)
+      {
+        digitalWrite(HW_LED_Y, LOW);
+        digitalWrite(HW_LED_R, HIGH);
+        digitalWrite(HW_LED_G, HIGH);
+      }
+      else if (extractorState >= 0.75)
+      {
+        digitalWrite(HW_LED_R, LOW);
+        digitalWrite(HW_LED_Y, HIGH);
+        digitalWrite(HW_LED_G, HIGH);
+      }
+      else
+      {
+        digitalWrite(HW_LED_R, HIGH);
+        digitalWrite(HW_LED_Y, HIGH);
+        digitalWrite(HW_LED_G, HIGH);
+      }
+    }
+    else{
+      delay(100);
+    }
+
+    vTaskDelayUntil(&xLastWakeTime, xPeriod);
   }
 }
