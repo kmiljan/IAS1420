@@ -33,7 +33,7 @@ bool power = true;
 
 
 // Main behaviour variables.
-int extractorState = 0;
+float extractorState = 0;
 float currentHumidity = 0;
 float currentTemperature = 0;
 
